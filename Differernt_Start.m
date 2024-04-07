@@ -2,9 +2,9 @@ clc,clear
 legendInfo = {}; % Initialize cell array to hold legend info
 frames = [];
 %%
-tspan = [0 500];
+tspan = [0 5000];
 idx = 1; % Initialize index for legendInfo
-MOVIE = 1; % Generate movie if MOVIE = 1
+MOVIE = 0; % Generate movie if MOVIE = 1
 filename = 'result/Chua_Differnt_start.gif';
 az = 10; % Initialize azimuth
 el = 10; % Initialize elevation
