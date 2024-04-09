@@ -3,8 +3,8 @@
 % Author: 王昊宸
 % 这个代码没有使用传统的电路建模方式，而是直接基于微分方程进行优化
 clc, clear
-tspan = [0 25];
-filename = 'result/Multiple_attractor.gif';
+tspan = [0 360];
+filename = 'result/Strange_attractor.gif';
 %%
 y0 = [0.5; 0.5; 0.5]; % initial conditions
 [t, y] = ode45(@myODE, tspan, y0);
@@ -33,90 +33,29 @@ grid on
 
 %%
 function dydt = myODE(t, y)
-    N = 0;
-    M = 0;
+    N = 5;
     alpha = 4.2;
     beta = 6.7;
     gamma = 4.0;
-    epson = 28.0;
+    epson = 12.2;
     dydt = zeros(3, 1);
     X = y(1);
     Y = y(2);
     Z = y(3);
-    dydt(1) = beta * Y - X - alpha * f(X, N, M);
+    dydt(1) = beta * Y - X - alpha * f(X, N);
     dydt(2) = beta * X - gamma * Z;
     dydt(3) = epson * Y - Z;
 end
 
-function sum = f(x, N, M)
-    sum = x - h0(x);
+function y = f(x, N)
+    y = x;
 
-    for n = 1:N
-        sum = sum - h_plus(x - 2 * n);
+    for n = 0:N - 1
+        y = y - sign(x + 2 * n);
     end
 
-    for m = 1:M
-        sum = sum - h_minus(x + 2 * m);
-    end
-
-end
-
-function y = h0(x)
-    persistent ylast;
-    %初始化
-    if isempty(ylast)
-        ylast = 0;
-    end
-
-    %滞回比较
-    if x <- 1 && ylast >= 1
-        ylast = -1;
-        y = -1;
-    elseif x > 1 && ylast <= -1
-        ylast = 1;
-        y = 1;
-    else
-        y = ylast;
-    end
-
-end
-
-function y = h_minus(x)
-    persistent ylast;
-    %初始化
-    if isempty(ylast)
-        ylast = 0;
-    end
-
-    %滞回比较
-    if x <- 1 && ylast == 0
-        ylast = -2;
-        y = -2;
-    elseif x > 1 && ylast == -2
-        ylast = 0;
-        y = 0;
-    else
-        y = ylast;
-    end
-
-end
-
-function y = h_plus(x)
-    persistent ylast;
-    %初始化
-    if isempty(ylast)
-        ylast = 0;
-    end
-
-    %滞回比较
-    if x <- 1 && ylast == 2
-        ylast = 0;
-        y = 0;
-    elseif x > 1 && ylast == 0
-        ylast = 2;
-        y = 2;
-    else
-        y = ylast;
+    for n = 1:N - 1
+        y = y - sign(x - 2 * n);
     end
 
 end

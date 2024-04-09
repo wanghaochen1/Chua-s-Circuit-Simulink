@@ -1,3 +1,4 @@
+% Author: 王昊宸
 clc, clear
 legendInfo = {}; % Initialize cell array to hold legend info
 frames = [];
