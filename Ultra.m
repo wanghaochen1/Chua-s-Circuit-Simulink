@@ -3,7 +3,7 @@
 % Author: 王昊宸
 % 这个代码没有使用传统的电路建模方式，而是直接基于微分方程进行优化
 clc, clear
-tspan = [0 250];
+tspan = [0 25];
 filename = 'result/Multiple_attractor.gif';
 %%
 y0 = [0.5; 0.5; 0.5]; % initial conditions
@@ -28,17 +28,17 @@ grid on
 %     else
 %         imwrite(imind, cm, filename, 'gif', 'WriteMode', 'append');
 %     end
-%
+% 
 % end
 
 %%
 function dydt = myODE(t, y)
-    N = 6;
-    M = 6;
+    N = 0;
+    M = 0;
     alpha = 4.2;
     beta = 6.7;
     gamma = 4.0;
-    epson = 11.8;
+    epson = 28.0;
     dydt = zeros(3, 1);
     X = y(1);
     Y = y(2);
@@ -62,37 +62,61 @@ function sum = f(x, N, M)
 end
 
 function y = h0(x)
+    persistent ylast;
+    %初始化
+    if isempty(ylast)
+        ylast = 0;
+    end
 
-    if x <- 1
+    %滞回比较
+    if x <- 1 && ylast >= 1
+        ylast = -1;
         y = -1;
-    elseif x > 1
+    elseif x > 1 && ylast <= -1
+        ylast = 1;
         y = 1;
     else
-        y = x;
+        y = ylast;
     end
 
 end
 
 function y = h_minus(x)
+    persistent ylast;
+    %初始化
+    if isempty(ylast)
+        ylast = 0;
+    end
 
-    if x <- 1
+    %滞回比较
+    if x <- 1 && ylast == 0
+        ylast = -2;
         y = -2;
-    elseif x > 1
+    elseif x > 1 && ylast == -2
+        ylast = 0;
         y = 0;
     else
-        y = x;
+        y = ylast;
     end
 
 end
 
 function y = h_plus(x)
+    persistent ylast;
+    %初始化
+    if isempty(ylast)
+        ylast = 0;
+    end
 
-    if x > 1
-        y = 2;
-    elseif x < -1
+    %滞回比较
+    if x <- 1 && ylast == 2
+        ylast = 0;
         y = 0;
+    elseif x > 1 && ylast == 0
+        ylast = 2;
+        y = 2;
     else
-        y = x;
+        y = ylast;
     end
 
 end
