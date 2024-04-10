@@ -2,10 +2,12 @@
 clc, clear
 legendInfo = {}; % Initialize cell array to hold legend info
 frames = [];
+colors = ['r', 'g', 'b', 'c', 'm', 'y', 'k'];
+color_idx = 1;
 %%
-tspan = [0 5000];
+tspan = [0 250];
 idx = 1; % Initialize index for legendInfo
-MOVIE = 0; % Generate movie if MOVIE = 1
+MOVIE = 1; % Generate movie if MOVIE = 1
 filename = 'result/Chua_Differnt_start.gif';
 az = 10; % Initialize azimuth
 el = 10; % Initialize elevation
@@ -14,7 +16,7 @@ figure
 grid on
 hold on
 
-for a = 1:0.1:1.2
+for a = 1:0.1:1.1
 
     for b = 0.5:0.1:0.6
 
@@ -22,10 +24,18 @@ for a = 1:0.1:1.2
             y0 = [a; b; c];
             [t, y] = ode45(@myODE, tspan, y0);
             plot3(y(:, 1), y(:, 2), y(:, 3));
+            plot3(a, b, c, [colors(color_idx) '.'], "MarkerSize", 20);
             legendInfo{idx} = ['Initial conditions: ', num2str(a), ', ', num2str(b), ', ', num2str(c)];
+            idx = idx + 1;
+            legendInfo{idx} = ['Start point', num2str(a), ', ', num2str(b), ', ', num2str(c)];
             idx = idx + 1;
             view(az, el) % Change view
             hold on
+            color_idx = color_idx + 1; % 更新颜色索引
+
+            if color_idx > length(colors) % 如果颜色索引超过颜色数组的长度，就重置为1
+                color_idx = 1;
+            end
 
             if MOVIE
                 frame = getframe; % Capture the plot as a frame
@@ -57,14 +67,6 @@ legend(legendInfo)
 if MOVIE
     movie(frames)
 end
-
-% y0 = [1; 0.5; 0]; % initial conditions
-% [t, y] = ode45(@myODE, tspan, y0);
-% figure
-% plot(y)
-% figure
-% plot3(y(:,1),y(:,2),y(:,3));
-% grid on
 
 %% Chua's Parameters
 function dydt = myODE(t, y)

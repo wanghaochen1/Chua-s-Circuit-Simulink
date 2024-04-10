@@ -13,6 +13,9 @@ y0 = [1; 0.5; 0]; % initial conditions
 for j = 1:10:length(t)
     % Draw plot for y upto current timepoint
     plot3(y(1:j, 1), y(1:j, 2), y(1:j, 3));
+    hold on
+    plot3(y(j, 1), y(j, 2), y(j, 3), '.', 'MarkerSize', 20);
+    hold off
     view(mod(j / 10, 360), 5);
     grid on
     drawnow
